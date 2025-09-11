@@ -1,26 +1,37 @@
-function Square({value}) {
-  function handleClick() {
-    console.log('click');
-  }
-  return <button className="square" onClick={handleClick}>{value}</button>;
+import { useState } from "react";
+
+function Square() {
+  const [value, setValue] = useState(null);
+  const handleClick = () => {
+    if (value === null) {
+      setValue("X");
+    } else {
+      setValue(null);
+    }
+  };
+  return (
+    <button className="square" onClick={handleClick}>
+      {value}
+    </button>
+  );
 }
 export default function Board() {
   return (
     <>
       <div className="board-row">
-        <Square value={1}/>
-        <Square value={2}/>
-        <Square value={3}/>
+        <Square />
+        <Square />
+        <Square />
       </div>
       <div className="board-row">
-        <Square value={4}/>
-        <Square value={5}/>
-        <Square value={6}/>
+        <Square />
+        <Square />
+        <Square />
       </div>
       <div className="board-row">
-        <Square value={7}/>
-        <Square value={8}/>
-        <Square value={9}/>
+        <Square />
+        <Square />
+        <Square />
       </div>
     </>
   );
