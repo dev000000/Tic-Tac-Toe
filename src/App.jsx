@@ -7,10 +7,8 @@ function Square({ value, onSquareClick }) {
     </button>
   );
 }
-function Board() {
-  // Array(9).fill(null) create [] with 9 element and set each element into null
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+function Board({ xIsNext, squares, onPlay }) {
+
   let status;
   const winner = calculateWinner(squares);
   if (winner) {
@@ -30,9 +28,7 @@ function Board() {
     } else {
       nextSquares[i] = "O";
     }
-    // set the squares state to the modified copy
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   };
   return (
     <>
@@ -80,11 +76,16 @@ function calculateWinner(squares) {
 export default function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+  const handlePlay = (nextSquares) => {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
   
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
         <ol>{/* TODO */}</ol>
