@@ -54,6 +54,9 @@ code {
   margin-top: -1px;
   text-align: center;
 }
+.square-winning {
+  background: red;
+}
 .board-row:after {
   clear: both;
   content: '';
