@@ -10,13 +10,22 @@ function Square({value, onSquareClick}) {
 export default function Board() {
   // Array(9).fill(null) create [] with 9 element and set each element into null
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const [xIsNext, setXIsNext] = useState(true);
   const handleClick = (i) => {
+    // if the square is already filled, return nothing
+    if(squares[i]) {
+      return;
+    }
     // create a copy of squares array to modify it
     const nextSquares = squares.slice();
-    // set X to the copy of squares array at index i
-    nextSquares[i] = 'X';
+    if(xIsNext) {
+      nextSquares[i] = 'X';
+    }else {
+      nextSquares[i] = 'O';
+    }
     // set the squares state to the modified copy
     setSquares(nextSquares);
+    setXIsNext(!xIsNext);
   }
   return (
     <>
