@@ -8,7 +8,6 @@ function Square({ value, onSquareClick }) {
   );
 }
 function Board({ xIsNext, squares, onPlay }) {
-
   let status;
   const winner = calculateWinner(squares);
   if (winner) {
@@ -51,6 +50,48 @@ function Board({ xIsNext, squares, onPlay }) {
     </>
   );
 }
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  // currentMove is an index to the history array, it mean the current step we are viewing
+  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[currentMove];
+  // handlePlay is called when a square is clicked, when you back to a previous move and play again, it will discard all the "future" history
+  const handlePlay = (nextSquares) => {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+    setXIsNext(!xIsNext);
+  };
+  const jumpTo = (nextMove) => {
+    setCurrentMove(nextMove);
+    setXIsNext(nextMove % 2 === 0);
+  };
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = "Go to move #" + move;
+    } else {
+      description = "Go to game start";
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
 function calculateWinner(squares) {
   // all possible winning combinations
   const lines = [
@@ -72,24 +113,4 @@ function calculateWinner(squares) {
   }
   // if no winner, return null, indicating the game is still ongoing
   return null;
-}
-export default function Game() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
-  const handlePlay = (nextSquares) => {
-    setHistory([...history, nextSquares]);
-    setXIsNext(!xIsNext);
-  }
-  
-  return (
-    <div className="game">
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
-      <div className="game-info">
-        <ol>{/* TODO */}</ol>
-      </div>
-    </div>
-  );
 }
